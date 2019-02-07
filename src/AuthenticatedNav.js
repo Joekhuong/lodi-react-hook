@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   }
 });
 
-const AuthenticatedNav = (props) => {
+const AuthenticatedNav = (props) => {//
   return (
     props.authenticated ? (
       <p>

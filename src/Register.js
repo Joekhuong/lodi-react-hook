@@ -67,7 +67,7 @@ class Register extends React.Component {
           lastname: self.state.lastname,
           region: {
             id: self.state.region,
-            name: self.state.regions[self.state.region]
+            name: self.props.regions[self.state.region]
           },
           roles: ["user"]
         };
@@ -79,13 +79,7 @@ class Register extends React.Component {
           .doc(user.uid)
           .set(user_info)
           .then(function() {
-            self.dispatch({
-              type: "LOGIN",
-              payload: {
-                user,
-                isAuthenticated: true
-              }
-            });
+            self.login(user);
             self.props.history.push("/");
           });
       })
@@ -93,6 +87,11 @@ class Register extends React.Component {
         alert(error.message);
       });
   };
+
+  login = e => {
+    this.props.login();
+    //setTimeout(() => this.setState({redirectToReferrer: true}), 100);
+  }
 
   render() {
     return (
@@ -119,7 +118,7 @@ class Register extends React.Component {
                     />
                   </div>
                   <div className="form-label-group">
-                    <label htmlFor="lastname">Password</label>
+                    <label htmlFor="lastname">Lastname</label>
                     <input
                       type="text"
                       id="lastname"
@@ -130,7 +129,7 @@ class Register extends React.Component {
                     />
                   </div>
                   <div className="form-label-group">
-                    <label htmlFor="email">Emaill</label>
+                    <label htmlFor="email">Email</label>
                     <input
                       type="email"
                       id="email"
