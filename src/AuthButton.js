@@ -4,6 +4,7 @@ import {connect} from './store';
 import {
   withRouter
 } from "react-router-dom";
+import firebase from './Firebase';
 
 const mapStateToProps = (state, props) => ({
   authenticated: state.authenticated
@@ -15,7 +16,8 @@ const mapDispatchToProps = (dispatch, props) => ({
       type: LOGOUT_ACTION,
       payload: {}
     });
-    setTimeout(() => props.history.push("/"), 100);
+    firebase.auth().signOut();
+    setTimeout(() => (props.history.push("/")), 100);
   }
 });
 

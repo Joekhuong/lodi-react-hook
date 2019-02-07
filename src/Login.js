@@ -4,7 +4,10 @@ import {connect} from './store';
 import {Redirect} from "react-router-dom";
 import firebase from './Firebase';
 
-const mapStateToProps = (state, props) => ({authenticated: state.authenticated});
+const mapStateToProps = (state, props) => ({
+  authenticated: state.authenticated,
+  ...state
+});
 
 const mapDispatchToProps = (dispatch, props) => ({
   login: () => {
@@ -70,8 +73,13 @@ class Login extends React.Component {
       }
     };
     const {redirectToReferrer} = this.state;
+    console.log(this.props);
 
-    if (redirectToReferrer) {
+    if (this.props.loading_state) {
+      return null;
+    }
+
+    if (redirectToReferrer || this.props.authenticated) {
       return <Redirect to={from} />;
     }
 

@@ -1,15 +1,21 @@
-import {FETCH_DATA,RESET_DATA, LOGOUT_ACTION, LOGIN_ACTION, FETCH_REGION} from './actions';
+import {FETCH_DATA,RESET_DATA, LOGOUT_ACTION, LOGIN_ACTION, FETCH_REGION, SET_LOADING_STATE} from './actions';
 
 export const initialState = {
   data: "ABC",
   authenticated: false,
-  regions: []
+  regions: [],
+  loading_state: true
 }
 
 const reducer = (state, action) => {
   const reduced = {...state};
 
   switch (action.type) {
+    case SET_LOADING_STATE:
+      return {
+        ...reduced,
+        loading_state: action.payload
+      }
     case FETCH_DATA:
       return {
         ...reduced,
