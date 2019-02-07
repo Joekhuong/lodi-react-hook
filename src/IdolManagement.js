@@ -31,6 +31,7 @@ class IdolManagement extends React.Component {
         let idols = {};
         querySnapshot.forEach((doc, key) => {
           let data = doc.data();
+          data.id = doc.id;
           idols = {...idols,[doc.id]:data};
         });
         self.props.setIdols(idols);
@@ -39,7 +40,6 @@ class IdolManagement extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     if(this.props.user.user_info.roles.includes('admin') === false)
     {
       this.props.history.push("/");
