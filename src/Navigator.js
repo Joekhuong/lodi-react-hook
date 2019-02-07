@@ -1,6 +1,7 @@
 import React from 'react';
 import AuthButton from './AuthButton';
 import Login from './Login';
+import Home from './Home';
 import PrivateRoute from './PrivateRoute';
 import {connect} from './store';
 import {BrowserRouter as Router, Route, Link, Switch} from "react-router-dom";
@@ -11,7 +12,6 @@ const mapDispatchToProps = (dispatch, props) => {};
 
 const Public = () => <h3>Public</h3>;
 const Protected = (props) => <h3>Protected {props.test}</h3>;
-const Home = () => <h3>Home</h3>;
 
 const AuthExample = (props) => (<Router>
   <div>

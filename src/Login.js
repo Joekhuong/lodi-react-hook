@@ -2,6 +2,7 @@ import React from 'react';
 import {LOGIN_ACTION} from './actions';
 import {connect} from './store';
 import {Redirect} from "react-router-dom";
+import firebase from './Firebase';
 
 const mapStateToProps = (state, props) => ({authenticated: state.authenticated});
 
@@ -16,10 +17,49 @@ class Login extends React.Component {
     redirectToReferrer: false
   };
 
-  login = (e) => {
-    e.preventDefault();
-    this.props.login();
+  handleOnChange = e => {
+   e.preventDefault(e);
+   this.setState({
+     [e.target.name]: e.target.value
+   });
+ };
 
+ handleOnSubmit = e => {
+    e.preventDefault();
+    let self = this;
+
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then(function(res) {
+        let user = res.user;
+        console.log(user);
+        if (user) {
+          firebase
+            .firestore()
+            .collection("users")
+            .doc(user.uid)
+            .get()
+            .then(function(doc) {
+              let user_info = doc.data();
+              console.log(user_info);
+              user.user_info = user_info;
+              self.login();
+            });
+        } else {
+          self.dispatch({
+            type: "LOGOUT",
+            payload: {}
+          });
+        }
+      })
+      .catch(function(error) {
+        alert(error.message);
+      });
+  };
+
+  login = e => {
+    this.props.login();
     setTimeout(() => this.setState({redirectToReferrer: true}), 100);
   }
 
@@ -49,7 +89,7 @@ class Login extends React.Component {
                 <div className="form-label-group">
                   <input type="password" name="password" id="password" className="form-control" placeholder="Password" required="required"/>
                 </div>
-                <button type="submit" className="btn btn-lg btn-primary btn-block text-uppercase" onClick={this.login}>
+                <button type="submit" className="btn btn-lg btn-primary btn-block text-uppercase">
                   Sign in
                 </button>
                 <a href="/register" className="btn btn-lg btn-dark btn-block text-uppercase">

@@ -1,8 +1,9 @@
-import {FETCH_DATA,RESET_DATA, LOGOUT_ACTION, LOGIN_ACTION} from './actions';
+import {FETCH_DATA,RESET_DATA, LOGOUT_ACTION, LOGIN_ACTION, FETCH_REGION} from './actions';
 
 export const initialState = {
   data: "ABC",
-  authenticated: false
+  authenticated: false,
+  regions: []
 }
 
 const reducer = (state, action) => {
@@ -19,12 +20,19 @@ const reducer = (state, action) => {
     case LOGIN_ACTION:
       return {
         ...reduced,
-        authenticated: true
+        authenticated: true,
+        ...action.payload
       }
     case LOGOUT_ACTION:
       return {
         ...reduced,
-        authenticated: false
+        authenticated: false,
+        ...action.payload
+      }
+    case FETCH_REGION:
+      return {
+        ...reduced,
+        regions: action.payload
       }
     default:
       return state;
