@@ -4,6 +4,7 @@ import Login from "./Login";
 import Register from "./Register";
 import Home from "./Home";
 import PrivateRoute from "./PrivateRoute";
+import IdolManagement from "./IdolManagement";
 import { connect } from "./store";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import firebase from "./Firebase";
@@ -51,7 +52,6 @@ class Routing extends React.Component {
             user.user_info = user_info;
             self.props.login(user);
           });
-
       } else {
         self.props.logout();
       }
@@ -64,28 +64,32 @@ class Routing extends React.Component {
         <div>
           {(() => {
             if (this.props.authenticated) {
-
               return (
                 <div>
                   <ul className="nav">
                     <li className="nav-item">
-                      <Link className="nav-link" to="/public">Public Page</Link>
+                      <Link className="nav-link" to="/public">
+                        Public Page
+                      </Link>
                     </li>
                     <li className="nav-item">
-                      <Link className="nav-link" to="/protected">Protected Page</Link>
+                      <Link className="nav-link" to="/protected">
+                        Protected Page
+                      </Link>
                     </li>
-                    {
-                      (() => {
-                        if(this.props.user.user_info.roles.includes('admin'))
-                        {
-                            return ( <li className="nav-item">
-                              <Link className="nav-link" to="/protected">Idol Management</Link>
-                            </li>);
-                        }
-                      })()
-                    }
+                    {(() => {
+                      if (this.props.user.user_info.roles.includes("admin")) {
+                        return (
+                          <li className="nav-item">
+                            <Link className="nav-link" to="/idol_management">
+                              Idol Management
+                            </Link>
+                          </li>
+                        );
+                      }
+                    })()}
                     <li className="nav-item">
-                      <AuthenticatedNav {...this.props}/>
+                      <AuthenticatedNav {...this.props} />
                     </li>
                   </ul>
                 </div>
@@ -105,6 +109,11 @@ class Routing extends React.Component {
             <Route path="/public" component={Public} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
+            <PrivateRoute
+              path="/idol_management"
+              {...this.props}
+              component={IdolManagement}
+            />
             <PrivateRoute
               authenticated={this.props.authenticated}
               {...this.props}

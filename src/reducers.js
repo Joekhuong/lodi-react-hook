@@ -1,10 +1,11 @@
-import {FETCH_DATA,RESET_DATA, LOGOUT_ACTION, LOGIN_ACTION, FETCH_REGION, SET_LOADING_STATE} from './actions';
+import {FETCH_DATA,RESET_DATA, LOGOUT_ACTION, LOGIN_ACTION, FETCH_REGION, SET_LOADING_STATE, SET_IDOLS} from './actions';
 
 export const initialState = {
   data: "ABC",
   authenticated: false,
   regions: [],
-  loading_state: true
+  loading_state: true,
+  idols: []
 }
 
 const reducer = (state, action) => {
@@ -15,6 +16,11 @@ const reducer = (state, action) => {
       return {
         ...reduced,
         loading_state: action.payload
+      }
+    case SET_IDOLS:
+      return {
+        ...reduced,
+        idols: action.payload
       }
     case FETCH_DATA:
       return {
