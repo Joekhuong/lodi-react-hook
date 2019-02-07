@@ -34,7 +34,7 @@ const AuthenticatedNav = (props) => {//
         </button>
       </p>
     ) : (
-      <p>You are not logged in.</p>
+      <></>
     )
   )
 };

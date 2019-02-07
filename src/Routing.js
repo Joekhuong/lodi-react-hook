@@ -64,6 +64,7 @@ class Routing extends React.Component {
         <div>
           {(() => {
             if (this.props.authenticated) {
+
               return (
                 <div>
                   <ul className="nav">
@@ -73,6 +74,16 @@ class Routing extends React.Component {
                     <li className="nav-item">
                       <Link className="nav-link" to="/protected">Protected Page</Link>
                     </li>
+                    {
+                      (() => {
+                        if(this.props.user.user_info.roles.includes('admin'))
+                        {
+                            return ( <li className="nav-item">
+                              <Link className="nav-link" to="/protected">Idol Management</Link>
+                            </li>);
+                        }
+                      })()
+                    }
                     <li className="nav-item">
                       <AuthenticatedNav {...this.props}/>
                     </li>

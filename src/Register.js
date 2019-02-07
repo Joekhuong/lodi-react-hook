@@ -88,8 +88,8 @@ class Register extends React.Component {
       });
   };
 
-  login = e => {
-    this.props.login();
+  login = (user) => {
+    this.props.login(user);
     //setTimeout(() => this.setState({redirectToReferrer: true}), 100);
   }
 
