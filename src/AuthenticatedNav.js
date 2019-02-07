@@ -7,11 +7,12 @@ import {
 import firebase from './Firebase';
 
 const mapStateToProps = (state, props) => ({
-  authenticated: state.authenticated
+  authenticated: state.authenticated,
+  ...props
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
-  logout: () => {
+  logout: () => {//
     dispatch({
       type: LOGOUT_ACTION,
       payload: {}
@@ -21,11 +22,11 @@ const mapDispatchToProps = (dispatch, props) => ({
   }
 });
 
-const AuthButton = (props) => {
+const AuthenticatedNav = (props) => {
   return (
     props.authenticated ? (
       <p>
-        Welcome!{" "}
+        Welcome {props.user.user_info.firstname} {props.user.user_info.lastname}!
         <button
           onClick={props.logout}
         >
@@ -41,4 +42,4 @@ const AuthButton = (props) => {
 export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(AuthButton))
+)(AuthenticatedNav))

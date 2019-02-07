@@ -1,12 +1,13 @@
-import React from 'react';
-import AuthButton from './AuthButton';
-import Login from './Login';
-import Home from './Home';
-import PrivateRoute from './PrivateRoute';
-import {connect} from './store';
-import {BrowserRouter as Router, Route, Link, Switch} from "react-router-dom";
-import firebase from './Firebase';
-import {LOGIN_ACTION, LOGOUT_ACTION, SET_LOADING_STATE} from './actions';
+import React from "react";
+import AuthenticatedNav from "./AuthenticatedNav";
+import Login from "./Login";
+import Register from "./Register";
+import Home from "./Home";
+import PrivateRoute from "./PrivateRoute";
+import { connect } from "./store";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import firebase from "./Firebase";
+import { LOGIN_ACTION, LOGOUT_ACTION } from "./actions";
 
 const mapStateToProps = (state, props) => ({
   authenticated: state.authenticated,
@@ -14,7 +15,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
-  login: (user) => {
+  login: user => {
     dispatch({
       type: LOGIN_ACTION,
       payload: {
@@ -23,62 +24,91 @@ const mapDispatchToProps = (dispatch, props) => ({
       }
     });
   },
-  logout: () => (
+  logout: () =>
     dispatch({
       type: LOGOUT_ACTION,
       payload: {
         loading_state: false
       }
-    }
-  ))
+    })
 });
 
 const Public = () => <h3>Public</h3>;
-const Protected = (props) => <h3>Protected {props.test}</h3>;
+const Protected = props => <h3>Protected {props.test}</h3>;
 
 class Routing extends React.Component {
-
   componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
-      user
-        ? this.props.login(user)
-        : this.props.logout()
+    var self = this;
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(user.uid)
+          .get()
+          .then(function(doc) {
+            let user_info = doc.data();
+            user.user_info = user_info;
+            self.props.login(user);
+          });
+
+      } else {
+        self.props.logout();
+      }
     });
   }
 
-  render() {
-    console.log(this.props);
-    return (<Router>
-      <div>
-
-        {
-          (() => {
+  render() {
+    return (
+      <Router>
+        <div>
+          {(() => {
             if (this.props.authenticated) {
-              return (<div>
-                <AuthButton/>
-                <ul>
-                  <li>
-                    <Link to="/public">Public Page</Link>
-                  </li>
-                  <li>
-                    <Link to="/protected">Protected Page</Link>
-                  </li>
-
-                </ul>
-              </div>)
+              return (
+                <div>
+                  <ul className="nav">
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/public">Public Page</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/protected">Protected Page</Link>
+                    </li>
+                    <li className="nav-item">
+                      <AuthenticatedNav {...this.props}/>
+                    </li>
+                  </ul>
+                </div>
+              );
             }
-          })()
-        }
+          })()}
 
-        <Switch>
-          <PrivateRoute authenticated={this.props.authenticated} {...this.props} exact path="/" component={Home} test="1"/>
-          <Route path="/public" component={Public}/>
-          <Route path="/login" component={Login}/>
-          <PrivateRoute authenticated={this.props.authenticated} {...this.props} path="/protected" component={Protected} test="1"/>
-        </Switch>
-      </div>
-    </Router>);
+          <Switch>
+            <PrivateRoute
+              authenticated={this.props.authenticated}
+              {...this.props}
+              exact
+              path="/"
+              component={Home}
+              test="1"
+            />
+            <Route path="/public" component={Public} />
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
+            <PrivateRoute
+              authenticated={this.props.authenticated}
+              {...this.props}
+              path="/protected"
+              component={Protected}
+              test="1"
+            />
+          </Switch>
+        </div>
+      </Router>
+    );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Routing)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Routing);

@@ -10,8 +10,11 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
-  login: () => {
-    dispatch({type: LOGIN_ACTION, payload: {}});
+  login: (user) => {
+    dispatch({
+      type: LOGIN_ACTION,
+      payload: {user, loading_state: false}
+    });
   }
 });
 
@@ -47,7 +50,7 @@ class Login extends React.Component {
               let user_info = doc.data();
               console.log(user_info);
               user.user_info = user_info;
-              self.login();
+              self.login(user);
             });
         } else {
           self.dispatch({
@@ -63,7 +66,7 @@ class Login extends React.Component {
 
   login = e => {
     this.props.login();
-    setTimeout(() => this.setState({redirectToReferrer: true}), 100);
+    //setTimeout(() => this.setState({redirectToReferrer: true}), 100);
   }
 
   render() {
@@ -73,7 +76,6 @@ class Login extends React.Component {
       }
     };
     const {redirectToReferrer} = this.state;
-    console.log(this.props);
 
     if (this.props.loading_state) {
       return null;
@@ -86,7 +88,7 @@ class Login extends React.Component {
     return (<div className="container">
       <div className="row">
         <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
-          <div className="card card-signin my-5 bg-secondary text-white">
+          <div className="card card-signin my-5 bg-light text-white">
             <div className="card-body">
               <h5 className="card-title text-center">Sign In</h5>
               <form className="form-signin" onSubmit={this.handleOnSubmit} onChange={this.handleOnChange}>
