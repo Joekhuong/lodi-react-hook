@@ -3,18 +3,25 @@ import { Button } from "react-bootstrap";
 
 class IdolListItem extends React.Component {
 
-  handleItemClick = (idol) => (e) => {
-    this.props.onItemClick(idol);
+  handleEditClick = (idol) => (e) => {
+    this.props.onItemEdit(idol);
+  }
+
+  handleDeleteClick = (idol_id) => (e) => {
+    this.props.onItemDelete(idol_id);
   }
 
   render() {
     return (
       <tr>
-        <td>{this.props.idol.first}</td>
-        <td>{this.props.idol.last}</td>
+        <td>{this.props.idol.firstname}</td>
+        <td>{this.props.idol.lastname}</td>
         <td>
-          <Button variant="primary" onClick={this.handleItemClick(this.props.idol)}>
+          <Button variant="primary" onClick={this.handleEditClick(this.props.idol)}>
             Edit
+          </Button>
+          <Button variant="primary" onClick={this.handleDeleteClick(this.props.idol.id)}>
+            Delete
           </Button>
         </td>
       </tr>

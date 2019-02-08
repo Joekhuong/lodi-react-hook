@@ -1,16 +1,15 @@
-import React from 'react';
-import {connect} from './store';
-import IdolList from './IdolList';
-import firebase from './Firebase';
-import {SET_IDOLS} from './actions';
-
+import React from "react";
+import { connect } from "./store";
+import IdolList from "./IdolList";
+import firebase from "./Firebase";
+import { SET_IDOLS } from "./actions";
 
 const mapStateToProps = (state, props) => ({
   ...props
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
-  setIdols: (idols) => {
+  setIdols: idols => {
     dispatch({
       type: SET_IDOLS,
       payload: idols
@@ -19,36 +18,47 @@ const mapDispatchToProps = (dispatch, props) => ({
 });
 
 class IdolManagement extends React.Component {
-
-  componentWillMount(){
+  componentWillMount() {
     /* Get all regions */
     var self = this;
     firebase
       .firestore()
-      .collection("idos")
+      .collection("idols")
       .get()
       .then(querySnapshot => {
         let idols = {};
         querySnapshot.forEach((doc, key) => {
           let data = doc.data();
           data.id = doc.id;
-          idols = {...idols,[doc.id]:data};
+          idols = { ...idols, [doc.id]: data };
         });
         self.props.setIdols(idols);
       });
 
+    firebase
+      .firestore()
+      .collection("idols")
+      .onSnapshot(function(querySnapshot) {
+        let idols = {};
+        querySnapshot.forEach((doc, key) => {
+          let data = doc.data();
+          data.id = doc.id;
+          idols = { ...idols, [doc.id]: data };
+        });
+        self.props.setIdols(idols);
+      });
   }
 
   render() {
-    if(this.props.user.user_info.roles.includes('admin') === false)
-    {
+    if (this.props.user.user_info.roles.includes("admin") === false) {
       this.props.history.push("/");
     }
 
-    return (
-      <IdolList idols={this.props.idols} />
-    )
+    return <IdolList idols={this.props.idols} />;
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(IdolManagement)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(IdolManagement);
