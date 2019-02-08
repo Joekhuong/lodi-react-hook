@@ -87,10 +87,12 @@ class IdolList extends React.Component {
     return (
       <React.Fragment>
         <table className="table table-striped table-hover">
-          <thead>
+          <thead className="thead-dark">
             <tr>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
+              <th scope="col"></th>
+              <th scope="col">Firstname</th>
+              <th scope="col">Lastname</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>

@@ -9,7 +9,8 @@ class IdolModalForm extends React.Component {
     this.state = {
       idol: props.idol || {
         firstname: "",
-        lastname: ""
+        lastname: "",
+        image_url: ""
       }
     };
   }
@@ -35,6 +36,7 @@ class IdolModalForm extends React.Component {
     console.log(this.state.idol);
     return (<React.Fragment>
       <Modal show={this.props.show} onHide={this.handleOnClose}>
+
         <Modal.Header closeButton="closeButton">
           <Modal.Title>{
               this.props.idol == null
@@ -54,8 +56,8 @@ class IdolModalForm extends React.Component {
             </Form.Group>
             <Form.Group controlId="formBasicChecbox">
               <Form.Label>Image URL</Form.Label>
-              <Form.Control type="text" placeholder="Image Url" onChange={this.handleOnChange}/>
-              <Image className="mt-3" src="https://via.placeholder.com/150/d32776" rounded />
+              <Form.Control type="text" placeholder="Image Url" name="image_url" value={this.state.idol.image_url} onChange={this.handleOnChange}/>
+              <Image className="mt-3" src={this.state.idol.image_url} rounded />
             </Form.Group>
           </Form>
         </Modal.Body>
