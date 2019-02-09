@@ -20,34 +20,6 @@ const mapDispatchToProps = (dispatch, props) => ({
 
 class IdolManagement extends React.Component {
   componentWillMount() {
-    /* Get all regions
-    var self = this;
-    firebase
-      .firestore()
-      .collection("idols")
-      .get()
-      .then(querySnapshot => {
-        let idols = {};
-        querySnapshot.forEach((doc, key) => {
-          let data = doc.data();
-          data.id = doc.id;
-          idols = { ...idols, [doc.id]: data };
-        });
-        self.props.setIdols(idols);
-      });
-
-    firebase
-      .firestore()
-      .collection("idols")
-      .onSnapshot(function(querySnapshot) {
-        let idols = {};
-        querySnapshot.forEach((doc, key) => {
-          let data = doc.data();
-          data.id = doc.id;
-          idols = { ...idols, [doc.id]: data };
-        });
-        self.props.setIdols(idols);
-      });*/
     var self = this;
     getIdols(this.props.dispatch)
       .then(res => {
@@ -57,8 +29,6 @@ class IdolManagement extends React.Component {
       .catch(err => {
         console.log(err);
       });
-
-
   }
 
   render() {
