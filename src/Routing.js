@@ -9,7 +9,15 @@ import { connect } from "./store";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import firebase from "./Firebase";
 import { LOGIN_ACTION, LOGOUT_ACTION } from "./actions";
-import {getUserByFirebaseUid} from "./UserModel";
+import {getUserByFirebaseUid, loginUser} from "./UserModel";
+import {
+  Navbar,
+  Nav,
+  NavDropdown,
+  FormControl,
+  Button,
+  Form
+} from "react-bootstrap";
 
 const mapStateToProps = (state, props) => ({
   authenticated: state.authenticated,
@@ -43,20 +51,9 @@ class Routing extends React.Component {
     var self = this;
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        // firebase
-        //   .firestore()
-        //   .collection("users")
-        //   .doc(user.uid)
-        //   .get()
-        //   .then(function(doc) {
-        //     let user_info = doc.data();
-        //     user.user_info = user_info;
-        //     self.props.login(user);
-        //   });
-
         getUserByFirebaseUid(user.uid).then(res => {
           user.user_info = res;
-          self.props.login(user);
+          loginUser(this.props.dispatch,user);
           self.props.history.push("/");
         })
         .catch(err => {
@@ -75,35 +72,36 @@ class Routing extends React.Component {
           {(() => {
             if (this.props.authenticated) {
               return (
-                <div>
-                  <ul className="nav">
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/public">
-                        Public Page
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/protected">
-                        Protected Page
-                      </Link>
-                    </li>
-                    {(() => {
-                      //if (this.props.user.user_info.roles.includes("admin")) {
-                      if (this.props.user.user_info.is_admin) {
-                        return (
-                          <li className="nav-item">
-                            <Link className="nav-link" to="/idol_management">
-                              Idol Management
-                            </Link>
-                          </li>
-                        );
-                      }
-                    })()}
-                    <li className="nav-item">
-                      <AuthenticatedNav {...this.props} />
-                    </li>
-                  </ul>
-                </div>
+                <Navbar bg="light" expand="lg">
+                  <Navbar.Brand href="#home">Lodi-World</Navbar.Brand>
+                  <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                  <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between">
+                    <Nav className="">
+                      <Nav.Link href="#"><Link className="nav-link" to="/">
+                              Home Page
+                            </Link></Nav.Link>
+                      <Nav.Link href="#"><Link className="nav-link" to="/protected">
+                              Protected Page
+                            </Link></Nav.Link>
+                            {(() => {
+                                   if (this.props.user.user_info.is_admin) {
+                                     return (
+                                         <Nav.Link href="#"> <Link className="nav-link" to="/idol_management">
+                                            Idol Management
+                                          </Link></Nav.Link>
+                                     );
+                                   }
+                                })()}
+                    </Nav>
+                    <Form inline>
+                      <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+                      <Button variant="outline-success" className="mt-2">Search</Button>
+                    </Form>
+
+                    <AuthenticatedNav {...this.props} />
+
+                  </Navbar.Collapse>
+                </Navbar>
               );
             }
           })()}

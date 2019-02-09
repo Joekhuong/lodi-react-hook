@@ -37,7 +37,7 @@ class IdolList extends React.Component {
   handleSaveIdol = idol => {
     var self = this;
     if (idol.id !== undefined) {
-      updateIdol(this.props.dispatch,idol)
+      updateIdol(this.props.dispatch, idol)
         .then(res => {
           self.handleClose();
         })
@@ -64,28 +64,30 @@ class IdolList extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <table className="table table-striped table-hover">
-          <thead className="thead-dark">
-            <tr>
-              <th scope="col" />
-              <th scope="col">Firstname</th>
-              <th scope="col">Lastname</th>
-              <th scope="col" />
-            </tr>
-          </thead>
-          <tbody>
-            {Object.keys(this.props.idols).map((item, index) => {
-              return (
-                <IdolListItem
-                  idol={this.props.idols[item]}
-                  key={item}
-                  onItemEdit={this.handleItemEdit}
-                  onItemDelete={this.handleDeleteIdol}
-                />
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="table-responsive">
+          <table responsive="sm" className="table table-striped table-hover">
+            <thead className="thead-dark">
+              <tr>
+                <th scope="col" />
+                <th scope="col">Firstname</th>
+                <th scope="col">Lastname</th>
+                <th scope="col" />
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(this.props.idols).map((item, index) => {
+                return (
+                  <IdolListItem
+                    idol={this.props.idols[item]}
+                    key={item}
+                    onItemEdit={this.handleItemEdit}
+                    onItemDelete={this.handleDeleteIdol}
+                  />
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
 
         <Button variant="primary" onClick={this.handleShow}>
           Create New

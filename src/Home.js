@@ -18,20 +18,6 @@ const mapDispatchToProps = (dispatch, props) => ({
 class Home extends React.Component {
 
   componentDidMount(){
-    /* Get all regions
-
-    firebase
-      .firestore()
-      .collection("regions")
-      .get()
-      .then(querySnapshot => {
-        let regions = {};
-        querySnapshot.forEach((doc, key) => {
-          let data = doc.data();
-          regions = {...regions,[doc.id]:data.name};
-        });
-        self.props.setRegion(regions);
-      });*/
       var self = this;
       getRegions().then(res => {
         let regions = {};
@@ -48,8 +34,8 @@ class Home extends React.Component {
 
   render() {
     return (
-      <Container>
-  <Row>
+      <Container fluid="true">
+  <Row variant='primary'>
     <Col>1 of 2</Col>
     <Col>2 of 2</Col>
   </Row>

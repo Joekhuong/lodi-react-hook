@@ -50,7 +50,7 @@ class IdolListItem extends React.Component {
           >
             Edit
           </Button>
-          <Button variant="danger" className="ml-2" onClick={this.showModal}>
+          <Button variant="danger" className="" onClick={this.showModal}>
             Delete
           </Button>
 
