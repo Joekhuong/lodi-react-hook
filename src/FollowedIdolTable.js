@@ -11,7 +11,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch, props) => ({});
 
-class RankingTable extends React.Component {
+class FollowedIdolTable extends React.Component {
 
   state = {
     select_region: -1,
@@ -20,32 +20,11 @@ class RankingTable extends React.Component {
 
   componentDidMount() {}
 
-  handleOnChange = (e) => {
-    e.preventDefault(e);
-    this.setState({
-      select_region: e.target.value,
-      onLoading: true
-    });
-
-    setTimeout(() => (this.setState({onLoading: false})), 5000);
-
-  }
-
   render() {
     return (
       <Container fluid="true">
         <Row className="">
-          <h1 className="d-block">Ranking Table</h1>
-          <Form.Control name="select_region" disabled={this.state.onLoading} value={this.state.select_region} onChange={this.handleOnChange} as="select">
-            <option value="-1">All region</option>
-            {Object.keys(this.props.regions).map((item, index) => {
-              return (
-                <option value={this.props.regions[item].id}>
-                  {this.props.regions[item]}
-                </option>
-              );
-            })}
-          </Form.Control>
+          <h1 className="d-block">Your idols</h1>
           <Table responsive>
             <tbody>
               <tr>
@@ -71,4 +50,4 @@ class RankingTable extends React.Component {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(RankingTable);
+)(FollowedIdolTable);

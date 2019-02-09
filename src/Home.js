@@ -2,9 +2,10 @@ import React from "react";
 import { connect } from "./store";
 import { FETCH_REGION } from "./actions";
 import firebase from "./Firebase";
-import { Container, Row, Col, Jumbotron, Table, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, Table, Button } from "react-bootstrap";
 import { getRegions } from "./RegionModel";
 import RankingTable from "./RankingTable";
+import FollowedIdolTable from "./FollowedIdolTable";
 
 const mapStateToProps = (state, props) => ({
   regions: state.regions,
@@ -26,32 +27,32 @@ class Home extends React.Component {
 
   render() {
     return (
-      <Container fluid="true">
-        <Row>
-          <Col>
+      <Container>
+        <Row className="mt-2">
+          <Col className="d-none d-lg-block d-xl-block border border-primary">
             <RankingTable />
           </Col>
-          <Col>
-            <Jumbotron fluid>
-              <Container>
-                <h1>Fluid jumbotron</h1>
-                <p>
-                  This is a modified jumbotron that occupies the entire
-                  horizontal space of its parent.
-                </p>
-              </Container>
-            </Jumbotron>
+
+          <Col lg="8">
+            <Container>
+              <Row className="">
+                <Col>
+                  <Form>
+                    <Form.Group controlId="">
+                      <Form.Control as="textarea" placeholder="What you want to post?" />
+                    </Form.Group>
+                    <Button variant="primary" type="submit">
+                      Post
+                    </Button>
+                  </Form>
+                  <hr/>
+                </Col>
+              </Row>
+            </Container>
           </Col>
-          <Col>
-            <Jumbotron fluid>
-              <Container>
-                <h1>Fluid jumbotron</h1>
-                <p>
-                  This is a modified jumbotron that occupies the entire
-                  horizontal space of its parent.
-                </p>
-              </Container>
-            </Jumbotron>
+
+          <Col className="d-none d-lg-block d-xl-block border border-warning">
+            <FollowedIdolTable />
           </Col>
         </Row>
       </Container>
