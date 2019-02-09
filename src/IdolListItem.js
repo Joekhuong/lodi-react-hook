@@ -39,10 +39,10 @@ class IdolListItem extends React.Component {
     return (
       <tr>
         <td>
-          <Image className="" src={this.props.idol.image_url} rounded />
+          <Image className="" src={this.props.idol.img_url} rounded />
         </td>
         <td>{this.props.idol.firstname}</td>
-        <td>{this.props.idol.lastname}</td>        
+        <td>{this.props.idol.lastname}</td>
         <td>
           <Button
             variant="primary"

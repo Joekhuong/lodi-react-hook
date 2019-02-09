@@ -9,6 +9,7 @@ import { connect } from "./store";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import firebase from "./Firebase";
 import { LOGIN_ACTION, LOGOUT_ACTION } from "./actions";
+import {getUserByFirebaseUid} from "./UserModel";
 
 const mapStateToProps = (state, props) => ({
   authenticated: state.authenticated,
@@ -42,16 +43,25 @@ class Routing extends React.Component {
     var self = this;
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        firebase
-          .firestore()
-          .collection("users")
-          .doc(user.uid)
-          .get()
-          .then(function(doc) {
-            let user_info = doc.data();
-            user.user_info = user_info;
-            self.props.login(user);
-          });
+        // firebase
+        //   .firestore()
+        //   .collection("users")
+        //   .doc(user.uid)
+        //   .get()
+        //   .then(function(doc) {
+        //     let user_info = doc.data();
+        //     user.user_info = user_info;
+        //     self.props.login(user);
+        //   });
+
+        getUserByFirebaseUid(user.uid).then(res => {
+          user.user_info = res;
+          self.props.login(user);
+          self.props.history.push("/");
+        })
+        .catch(err => {
+          console.log(err);
+        });
       } else {
         self.props.logout();
       }
@@ -78,7 +88,8 @@ class Routing extends React.Component {
                       </Link>
                     </li>
                     {(() => {
-                      if (this.props.user.user_info.roles.includes("admin")) {
+                      //if (this.props.user.user_info.roles.includes("admin")) {
+                      if (this.props.user.user_info.is_admin) {
                         return (
                           <li className="nav-item">
                             <Link className="nav-link" to="/idol_management">

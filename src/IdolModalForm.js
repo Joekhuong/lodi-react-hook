@@ -10,7 +10,7 @@ class IdolModalForm extends React.Component {
       idol: props.idol || {
         firstname: "",
         lastname: "",
-        image_url: ""
+        img_url: ""
       }
     };
   }
@@ -56,8 +56,8 @@ class IdolModalForm extends React.Component {
             </Form.Group>
             <Form.Group controlId="formBasicChecbox">
               <Form.Label>Image URL</Form.Label>
-              <Form.Control type="text" placeholder="Image Url" name="image_url" value={this.state.idol.image_url} onChange={this.handleOnChange}/>
-              <Image className="mt-3" src={this.state.idol.image_url} rounded />
+              <Form.Control type="text" placeholder="Image Url" name="img_url" value={this.state.idol.img_url} onChange={this.handleOnChange}/>
+              <Image className="mt-3" src={this.state.idol.img_url} rounded />
             </Form.Group>
           </Form>
         </Modal.Body>

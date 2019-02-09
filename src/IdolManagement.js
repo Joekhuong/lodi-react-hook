@@ -3,6 +3,7 @@ import { connect } from "./store";
 import IdolList from "./IdolList";
 import firebase from "./Firebase";
 import { SET_IDOLS } from "./actions";
+import { getIdols } from "./IdolModel";
 
 const mapStateToProps = (state, props) => ({
   ...props
@@ -19,7 +20,7 @@ const mapDispatchToProps = (dispatch, props) => ({
 
 class IdolManagement extends React.Component {
   componentWillMount() {
-    /* Get all regions */
+    /* Get all regions
     var self = this;
     firebase
       .firestore()
@@ -46,11 +47,22 @@ class IdolManagement extends React.Component {
           idols = { ...idols, [doc.id]: data };
         });
         self.props.setIdols(idols);
+      });*/
+    var self = this;
+    getIdols(this.props.dispatch)
+      .then(res => {
+        console.log(res);
+        self.props.setIdols(res);
+      })
+      .catch(err => {
+        console.log(err);
       });
+
+
   }
 
   render() {
-    if (this.props.user.user_info.roles.includes("admin") === false) {
+    if (this.props.user.user_info.is_admin === false) {
       this.props.history.push("/");
     }
 

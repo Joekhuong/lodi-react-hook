@@ -1,8 +1,8 @@
 import React from 'react';
-import {LOGIN_ACTION} from './actions';
 import {connect} from './store';
 import {Redirect} from "react-router-dom";
 import firebase from './Firebase';
+import {getUserByFirebaseUid, loginUser, logoutUser} from "./UserModel";
 
 const mapStateToProps = (state, props) => ({
   authenticated: state.authenticated,
@@ -10,12 +10,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
-  login: (user) => {
-    dispatch({
-      type: LOGIN_ACTION,
-      payload: {user, loading_state: false}
-    });
-  }
+
 });
 
 class Login extends React.Component {
@@ -41,22 +36,17 @@ class Login extends React.Component {
         let user = res.user;
         console.log(user);
         if (user) {
-          firebase
-            .firestore()
-            .collection("users")
-            .doc(user.uid)
-            .get()
-            .then(function(doc) {
-              let user_info = doc.data();
-              console.log(user_info);
-              user.user_info = user_info;
-              self.login(user);
-            });
-        } else {
-          self.dispatch({
-            type: "LOGOUT",
-            payload: {}
+          getUserByFirebaseUid(user.uid).then(res => {
+            user.user_info = res;
+            self.login(user);
+            self.props.history.push("/");
+          })
+          .catch(err => {
+            console.log(err);
           });
+
+        } else {
+          logoutUser(this.props.dispatch);
         }
       })
       .catch(function(error) {
@@ -65,8 +55,7 @@ class Login extends React.Component {
   };
 
   login = (user) => {
-    this.props.login(user);
-    //setTimeout(() => this.setState({redirectToReferrer: true}), 100);
+    loginUser(this.props.dispatch,user);
   }
 
   render() {

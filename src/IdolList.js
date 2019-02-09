@@ -1,20 +1,15 @@
 import React from "react";
 import { connect } from "./store";
-import { FETCH_REGION } from "./actions";
-import firebase from "./Firebase";
 import IdolListItem from "./IdolListItem";
 import IdolModalForm from "./IdolModalForm";
 import { Button } from "react-bootstrap";
+import { createIdol, deleteIdol, updateIdol } from "./IdolModel";
 
 const mapStateToProps = (state, props) => ({
   ...props
 });
 
-const mapDispatchToProps = (dispatch, props) => ({
-  setRegion: regions => {
-    dispatch({ type: FETCH_REGION, payload: regions });
-  }
-});
+const mapDispatchToProps = (dispatch, props) => ({});
 
 class IdolList extends React.Component {
   state = {
@@ -42,45 +37,28 @@ class IdolList extends React.Component {
   handleSaveIdol = idol => {
     var self = this;
     if (idol.id !== undefined) {
-      firebase
-        .firestore()
-        .collection("idols")
-        .doc(idol.id)
-        .set(idol)
-        .then(function() {
-          console.log("Document successfully written!");
+      updateIdol(this.props.dispatch,idol)
+        .then(res => {
           self.handleClose();
         })
-        .catch(function(error) {
-          console.error("Error writing document: ", error);
+        .catch(err => {
+          console.log(err);
         });
     } else {
-      firebase
-        .firestore()
-        .collection("idols")
-        .add(idol)
-        .then(function(docRef) {
-          console.log("Document written with ID: ", docRef.id);
+      createIdol(this.props.dispatch, idol)
+        .then(res => {
           self.handleClose();
         })
-        .catch(function(error) {
-          console.error("Error adding document: ", error);
+        .catch(err => {
+          console.log(err);
         });
     }
   };
 
   handleDeleteIdol = idol_id => {
-    firebase
-      .firestore()
-      .collection("idols")
-      .doc(idol_id)
-      .delete()
-      .then(function() {
-        console.log("Document successfully deleted!");
-      })
-      .catch(function(error) {
-        console.error("Error removing document: ", error);
-      });
+    deleteIdol(idol_id).catch(err => {
+      console.log(err);
+    });
   };
 
   render() {
@@ -89,10 +67,10 @@ class IdolList extends React.Component {
         <table className="table table-striped table-hover">
           <thead className="thead-dark">
             <tr>
-              <th scope="col"></th>
+              <th scope="col" />
               <th scope="col">Firstname</th>
               <th scope="col">Lastname</th>
-              <th scope="col"></th>
+              <th scope="col" />
             </tr>
           </thead>
           <tbody>
