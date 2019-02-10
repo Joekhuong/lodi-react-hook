@@ -6,6 +6,7 @@ import Home from "./Home";
 import PrivateRoute from "./PrivateRoute";
 import IdolManagement from "./IdolManagement";
 import { connect } from "./store";
+import IdolSearch from "./IdolSearch";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import firebase from "./Firebase";
 import { LOGIN_ACTION, LOGOUT_ACTION } from "./actions";
@@ -19,9 +20,12 @@ import {
   Form
 } from "react-bootstrap";
 
+import NavBar from "./NavBar";
+
 const mapStateToProps = (state, props) => ({
   authenticated: state.authenticated,
-  ...state
+  ...state,
+  ...props
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -65,72 +69,17 @@ class Routing extends React.Component {
     });
   }
 
+  handleSearch = (e) => {
+    console.log('Search');
+    console.log(this.props.history);
+    //this.props.history.push('/dashboard')
+  }
+
   render() {
     return (
       <Router>
         <div>
-          {(() => {
-            if (this.props.authenticated) {
-              return (
-                <Navbar bg="light" expand="lg">
-                  <Navbar.Brand href="#home">Lodi-World</Navbar.Brand>
-                  <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                  <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between">
-                    <Nav className="">
-                      <Nav.Link href="#"><Link className="nav-link" to="/">
-                              Home Page
-                            </Link></Nav.Link>
-                      <Nav.Link href="#"><Link className="nav-link" to="/protected">
-                              Protected Page
-                            </Link></Nav.Link>
-                            {(() => {
-                                   if (this.props.user.user_info.is_admin) {
-                                     return (
-                                         <Nav.Link href="#"> <Link className="nav-link" to="/idol_management">
-                                            Idol Management
-                                          </Link></Nav.Link>
-                                     );
-                                   }
-                                })()}
-                    </Nav>
-                    <Form inline>
-                      <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                      <Button variant="outline-success" className="mt-2">Search</Button>
-                    </Form>
-
-                    <AuthenticatedNav {...this.props} />
-
-                  </Navbar.Collapse>
-                </Navbar>
-              );
-            }
-          })()}
-
-          <Switch>
-            <PrivateRoute
-              authenticated={this.props.authenticated}
-              {...this.props}
-              exact
-              path="/"
-              component={Home}
-              test="1"
-            />
-            <Route path="/public" component={Public} />
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
-            <PrivateRoute
-              path="/idol_management"
-              {...this.props}
-              component={IdolManagement}
-            />
-            <PrivateRoute
-              authenticated={this.props.authenticated}
-              {...this.props}
-              path="/protected"
-              component={Protected}
-              test="1"
-            />
-          </Switch>
+          <NavBar {...this.props}/>
         </div>
       </Router>
     );
