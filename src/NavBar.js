@@ -53,11 +53,27 @@ const Protected = props => <h3>Protected {props.test}</h3>;
 
 class NavBar extends React.Component {
 
+  state = {
+    search_term: ""
+  }
+
+  handleSearchTermChange = (e) => {
+    this.setState({
+      search_term: e.target.value
+    });
+  }
 
   handleSearch = (e) => {
     console.log('Search');
     console.log(this.props.history);
-    this.props.history.push('/idol_search/123')
+    const term = this.state.search_term;
+    console.log(term);
+    if(term.length == 0)
+    {
+      console.log(term);
+      return false;
+    }
+    this.props.history.push('/idol_search/'+term);
   }
 
   render() {
@@ -88,10 +104,11 @@ class NavBar extends React.Component {
                                    }
                                 })()}
                     </Nav>
-                    <Form inline>
-                      <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+
+                    <div className="d-flex">
+                      <FormControl type="text" placeholder="Search" value={this.state.search_term} onChange={this.handleSearchTermChange}  className="mr-sm-2" />
                       <Button variant="outline-success" className="mt-2" onClick={this.handleSearch}>Search</Button>
-                    </Form>
+                    </div>
 
                     <AuthenticatedNav {...this.props} />
 

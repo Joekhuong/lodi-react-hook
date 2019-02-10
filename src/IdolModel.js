@@ -11,6 +11,29 @@ const setIdols = (dispatch, idols) => {
   });
 }
 
+export const searchIdols = (term) => {
+  console.log(term);
+  return new Promise(function(resolve, reject) {
+    fetch(idols_collection_url+"search/"+term, {
+        mode: 'cors'
+      })
+      .then(res => res.json())
+      .then(
+        (result) => {
+          console.log(result);
+          resolve(result);
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          reject(error);
+        }
+      )
+      .catch((err) => reject(err))
+  })
+}
+
 export const getIdols = (dispatch) => {
   return new Promise(function(resolve, reject) {
     fetch(idols_collection_url, {

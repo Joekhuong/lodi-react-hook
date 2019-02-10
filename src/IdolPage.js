@@ -29,7 +29,7 @@ const mapDispatchToProps = (dispatch, props) => ({
 });
 
 
-class IdolSearch extends React.Component {
+class IdolPage extends React.Component {
 
   state = {
     idols: []
@@ -98,4 +98,4 @@ class IdolSearch extends React.Component {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withRouter(IdolSearch));
+)(withRouter(IdolPage));
