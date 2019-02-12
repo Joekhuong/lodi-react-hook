@@ -9,13 +9,15 @@ import { connect } from "./store";
 import { BrowserRouter as Router, Route, Link, withRouter, Switch } from "react-router-dom";
 import firebase from "./Firebase";
 import { LOGIN_ACTION, LOGOUT_ACTION } from "./actions";
-import {searchIdols} from "./IdolModel";
+import {getIdolByPageId} from "./IdolModel";
 import {
   Table,
   Container,
   Col,
   Row,
-  Image
+  Image,
+  Form,
+  Button
 } from "react-bootstrap";
 
 
@@ -32,16 +34,15 @@ const mapDispatchToProps = (dispatch, props) => ({
 class IdolPage extends React.Component {
 
   state = {
-    idols: []
+    idol: null
   }
 
   componentDidMount() {
-
-    const { term } = this.props.match.params || "";
-    console.log(this.props);
-    searchIdols(term).then(res => {
-      console.log(res);
-      this.setState({idols: res});
+    var self = this;
+    const { page_id } = this.props.match.params || "";
+    getIdolByPageId(page_id).then(res => {
+      console.log(self.props);
+      this.setState({idol: res});
     }).catch(err => {
       console.log(err);
     });
@@ -52,42 +53,51 @@ class IdolPage extends React.Component {
   }
 
   render() {
-    const { term } = this.props.match.params
-    console.log(this.state.idols);
+    const { page_id } = this.props.match.params
 
-    if(term == undefined)
+    if(page_id == undefined)
     {
       this.props.history.push('/');
     }
 
-    if(this.props.loading_state == true)
+    if(this.props.loading_state == true || this.state.idol == null)
     {
       return null;
     }
+
     return (
       <Container>
-        <Row>
-          <Col>
-          <h1 className="d-block">Idol search result for "{term}" </h1>
-          <Table responsive>
-            <tbody>
-            {this.state.idols.length > 0 ? Object.keys(this.state.idols).map((item, index) => {
-              return (
-                <tr>
-                  <td>
-                    <Image width="50" height="50" className="" src={this.state.idols[item].img_url} rounded />
-                  </td>
-                  <td>
-                    <Link className="nav-link" to={"/idol/"+ this.state.idols[item].page_id}>
-                       <span>{this.state.idols[item].firstname} {this.state.idols[item].lastname}</span>
-                     </Link>
-                  </td>
-                </tr>
-              )
-            }): (<h2>No result</h2>)}
+        <Row className="mt-2">
+          <h1>Page for idol {this.state.idol.firstname} {this.state.idol.lastname}</h1>
+        </Row>
+        <Row className="mt-2">
+          <Col className="d-none d-lg-block d-xl-block">
+            <Image className="mt-3" src={this.state.idol.img_url} rounded />
+            <Button className="mt-2" variant="primary" type="submit">
+              Follow
+            </Button>
+          </Col>
 
-            </tbody>
-          </Table>
+          <Col lg="8">
+            <Container>
+              <Row className="">
+                <Col>
+                  <Form>
+                    <Form.Group controlId="">
+                      <Form.Control as="textarea" placeholder="What you want to post?" />
+                    </Form.Group>
+                    <Button variant="primary" type="submit">
+                      Post
+                    </Button>
+                  </Form>
+                  <hr/>
+                </Col>
+              </Row>
+            </Container>
+          </Col>
+
+          <Col className="d-none d-lg-block d-xl-block border border-warning">
+
           </Col>
         </Row>
       </Container>

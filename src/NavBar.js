@@ -6,6 +6,7 @@ import Home from "./Home";
 import PrivateRoute from "./PrivateRoute";
 import IdolManagement from "./IdolManagement";
 import IdolSearch from "./IdolSearch";
+import IdolPage from "./IdolPage";
 
 import { connect } from "./store";
 import { BrowserRouter as Router, Route, Link, withRouter, Switch } from "react-router-dom";
@@ -63,21 +64,24 @@ class NavBar extends React.Component {
     });
   }
 
+  handleSearchTextKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.handleSearch(e);
+    }
+  }
+
   handleSearch = (e) => {
-    console.log('Search');
-    console.log(this.props.history);
+
     const term = this.state.search_term;
-    console.log(term);
+
     if(term.length == 0)
     {
-      console.log(term);
       return false;
     }
     this.props.history.push('/idol_search/'+term);
   }
 
   render() {
-    console.log(this.props);
     return (
         <div>
           {(() => {
@@ -106,7 +110,7 @@ class NavBar extends React.Component {
                     </Nav>
 
                     <div className="d-flex">
-                      <FormControl type="text" placeholder="Search" value={this.state.search_term} onChange={this.handleSearchTermChange}  className="mr-sm-2" />
+                      <FormControl type="text" placeholder="Search" value={this.state.search_term} onChange={this.handleSearchTermChange} onKeyPress={this.handleSearchTextKeyPress}  className="mr-sm-2" />
                       <Button variant="outline-success" className="mt-2" onClick={this.handleSearch}>Search</Button>
                     </div>
 
@@ -126,10 +130,13 @@ class NavBar extends React.Component {
               component={Home}
               test="1"
             />
+
             <Route path="/public" component={Public} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
             <Route path="/idol_search/:term?" component={IdolSearch} />
+            <Route path="/idol/:page_id" component={IdolPage} />
+
             <PrivateRoute
               path="/idol_management"
               {...this.props}
