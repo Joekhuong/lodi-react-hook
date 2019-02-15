@@ -76,6 +76,36 @@ export const getIdolByPageId = (page_id) => {
   })
 }
 
+export const checkFollow = (dispatch,idol,user) => {
+  return new Promise(function(resolve, reject) {
+
+    idol.page_id = uuid();
+
+    fetch(idols_collection_url, {
+        mode: 'cors',
+        method: "POST",
+        body: JSON.stringify(idol),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => res.json())
+      .then(
+        (result) => {
+          getIdols(dispatch);
+          resolve(result);
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          reject(error);
+        }
+      )
+      .catch((err) => reject(err))
+  })
+}
+
 export const createIdol = (dispatch,idol) => {
   return new Promise(function(resolve, reject) {
 

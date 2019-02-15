@@ -34,7 +34,8 @@ const mapDispatchToProps = (dispatch, props) => ({
 class IdolPage extends React.Component {
 
   state = {
-    idol: null
+    idol: null,
+    is_follow: null
   }
 
   componentDidMount() {
@@ -60,7 +61,7 @@ class IdolPage extends React.Component {
       this.props.history.push('/');
     }
 
-    if(this.props.loading_state == true || this.state.idol == null)
+    if(this.props.loading_state == true || this.state.idol == null || this.state.is_follow == null)
     {
       return null;
     }
