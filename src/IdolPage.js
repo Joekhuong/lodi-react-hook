@@ -1,15 +1,9 @@
 import React from "react";
-import AuthenticatedNav from "./AuthenticatedNav";
-import Login from "./Login";
-import Register from "./Register";
-import Home from "./Home";
-import PrivateRoute from "./PrivateRoute";
-import IdolManagement from "./IdolManagement";
 import { connect } from "./store";
 import { BrowserRouter as Router, Route, Link, withRouter, Switch } from "react-router-dom";
-import firebase from "./Firebase";
-import { LOGIN_ACTION, LOGOUT_ACTION } from "./actions";
+
 import {getIdolByPageId} from "./IdolModel";
+import {checkFollow, followIdol, unFollowIdol} from "./FollowModel";
 import {
   Table,
   Container,
@@ -41,16 +35,58 @@ class IdolPage extends React.Component {
   componentDidMount() {
     var self = this;
     const { page_id } = this.props.match.params || "";
+
+    console.log(this.props);
+
     getIdolByPageId(page_id).then(res => {
-      console.log(self.props);
-      this.setState({idol: res});
+
+      let idol = res;
+
+      checkFollow(self.props.user.user_info.id,idol.id)
+      .then(
+        (res) => {
+          console.log(res);
+          this.setState({idol: idol, is_follow: res.status});
+        }
+      ).catch(err => {
+        console.log(err);
+      });
+
     }).catch(err => {
       console.log(err);
     });
   }
 
-  handleSearch = (e) => {
+  handleFollow = (e) => {
 
+    let self = this;
+    let idol = this.state.idol;
+
+    followIdol(self.props.user.user_info.id,idol.id)
+    .then(
+      (res) => {
+        console.log(res);
+        this.setState({is_follow: true});
+      }
+    ).catch(err => {
+      console.log(err);
+    });
+  }
+
+  handleUnfollow = (e) => {
+
+    let self = this;
+    let idol = this.state.idol;
+
+    unFollowIdol(self.props.user.user_info.id,idol.id)
+    .then(
+      (res) => {
+        console.log(res);
+        this.setState({is_follow: false});
+      }
+    ).catch(err => {
+      console.log(err);
+    });
   }
 
   render() {
@@ -74,9 +110,11 @@ class IdolPage extends React.Component {
         <Row className="mt-2">
           <Col className="d-none d-lg-block d-xl-block">
             <Image className="mt-3" src={this.state.idol.img_url} rounded />
-            <Button className="mt-2" variant="primary" type="submit">
+            {this.state.is_follow == false ? <Button className="mt-2" variant="primary" onClick={this.handleFollow}>
               Follow
-            </Button>
+            </Button> : <Button className="mt-2" variant="danger" onClick={this.handleUnfollow}>
+              Unfollow
+            </Button>}
           </Col>
 
           <Col lg="8">

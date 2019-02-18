@@ -68,6 +68,7 @@ class IdolSearch extends React.Component {
     if (this.props.loading_state == true) {
       return null;
     }
+    
     return (
       <Container>
         <Row>
