@@ -52,7 +52,7 @@ export const getPostByPageId = (page_id) => {
 export const getPostByUserId = (user_id) => {
   return new Promise(function(resolve, reject) {
 
-    fetch(post_collection_url+"/user_id/"+user_id,{mode: 'cors'})
+    fetch(post_collection_url+"user_id/"+user_id,{mode: 'cors'})
     .then(res => res.json())
     .then(
       (result) => {
@@ -72,7 +72,7 @@ export const getPostByUserId = (user_id) => {
 export const getPostByParentId = (parent_id) => {
   return new Promise(function(resolve, reject) {
 
-    fetch(post_collection_url+"/parent_id/"+parent_id,{mode: 'cors'})
+    fetch(post_collection_url+"parent_id/"+parent_id,{mode: 'cors'})
     .then(res => res.json())
     .then(
       (result) => {

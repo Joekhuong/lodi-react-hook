@@ -32,26 +32,7 @@ class IdolPage extends React.Component {
   state = {
     idol: null,
     is_follow: null,
-    posts: [
-      {
-        content: "ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB",
-        created_at: "01-01-2019",
-        created_by: "Ly Quoc Phong"
-
-      },
-      {
-        content: "ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB",
-        created_at: "01-01-2019",
-        created_by: "Ly Quoc Phong"
-
-      },
-      {
-        content: "ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB",
-        created_at: "01-01-2019",
-        created_by: "Ly Quoc Phong"
-
-      }
-    ]
+    posts: []
 
   }
 
@@ -120,6 +101,17 @@ class IdolPage extends React.Component {
     });
   }
 
+  handleOnPost = () => {
+    const { page_id } = this.props.match.params || "";
+    getPostByPageId(page_id)
+    .then((res)=> {
+      this.setState({posts: res});
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
   render() {
     const { page_id } = this.props.match.params
 
@@ -154,7 +146,7 @@ class IdolPage extends React.Component {
             <Container>
               <Row className="">
                 <Col>
-                  <PostForm />
+                  <PostForm page_id={page_id} onPosted={this.handleOnPost}/>
                   <hr/>
 
                 </Col>

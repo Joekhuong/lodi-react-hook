@@ -30,15 +30,18 @@ class Post extends React.Component {
   }
 
   render() {
-    console.log('post render');
+
+    var date = new Date(this.props.item.createdAt);
+    console.log(this.props.item.idol_name);
     return (
       <Container>
         <Row className="post-content">
           {this.props.item.content}
         </Row>
         <Row className="post-footer">
-           <Badge className="mr-2" variant="info">Posted by: Ly Quoc Phong</Badge>
-           <Badge variant="secondary">Posted at: {this.props.item.createdAt}</Badge>
+           <Badge variant="info">Posted by: {this.props.item.user_name}</Badge>
+           <Badge variant="secondary" className="ml-2" >Posted at: {date.toDateString()}</Badge>
+           {this.props.item.idol_name != null ? <Badge className="ml-2" variant="warning">Idol: {this.props.item.idol_name}</Badge> : ""}
         </Row>
         <hr/>
       </Container>

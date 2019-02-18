@@ -37,7 +37,7 @@ class Post extends React.Component {
       page_id: this.state.page_id,
       parent_id: this.state.parent_id
     }
-
+    console.log(post);
     this.setState({
       show_modal: false,
       disable_post_btn: true
@@ -49,7 +49,7 @@ class Post extends React.Component {
         post_content: "",
         disable_post_btn: false
       });
-
+      this.props.onPosted();
     })
     .catch(()=>{
       this.setState({

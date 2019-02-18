@@ -1,11 +1,13 @@
 import React from "react";
 import { connect } from "./store";
 import { FETCH_REGION } from "./actions";
-import firebase from "./Firebase";
-import { Container, Row, Col, Form, Table, Button } from "react-bootstrap";
+import PostForm from "./PostForm";
+import { Container, Row, Col } from "react-bootstrap";
 import { getRegions } from "./RegionModel";
 import RankingTable from "./RankingTable";
 import FollowedIdolTable from "./FollowedIdolTable";
+import {getPostByUserId} from "./PostModel";
+import Post from "./Post";
 
 const mapStateToProps = (state, props) => ({
   regions: state.regions,
@@ -19,8 +21,32 @@ const mapDispatchToProps = (dispatch, props) => ({
 });
 
 class Home extends React.Component {
+
+  state = {
+    posts: []
+  }
+
   componentDidMount() {
     getRegions(this.props.dispatch).catch(err => {
+      console.log(err);
+    });
+
+    getPostByUserId(this.props.user.user_info.id)
+    .then((res)=> {
+      console.log(res);
+      this.setState({posts: res});
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
+  handleOnPost = () => {
+    getPostByUserId(this.props.user.user_info.id)
+    .then((res)=> {
+      this.setState({posts: res});
+    })
+    .catch(err => {
       console.log(err);
     });
   }
@@ -29,7 +55,7 @@ class Home extends React.Component {
     return (
       <Container>
         <Row className="mt-2">
-          <Col className="d-none d-lg-block d-xl-block border border-primary">
+          <Col className="d-none d-lg-block d-xl-block">
             <RankingTable />
           </Col>
 
@@ -37,16 +63,12 @@ class Home extends React.Component {
             <Container>
               <Row className="">
                 <Col>
-                  <Form>
-                    <Form.Group controlId="">
-                      <Form.Control as="textarea" placeholder="What you want to post?" />
-                    </Form.Group>
-                    <Button variant="primary" type="submit">
-                      Post
-                    </Button>
-                  </Form>
+                  <PostForm user_id={this.props.user.user_info.id} onPosted={this.handleOnPost}/>
                   <hr/>
                 </Col>
+              </Row>
+              <Row className="">
+                {this.state.posts.map((post) => <Post item={post}/>)}
               </Row>
             </Container>
           </Col>
