@@ -65,8 +65,10 @@ class IdolPage extends React.Component {
     followIdol(self.props.user.user_info.id,idol.id)
     .then(
       (res) => {
-        console.log(res);
-        this.setState({is_follow: true});
+        if(res.status == true)
+        {
+            this.setState({is_follow: true});
+        }
       }
     ).catch(err => {
       console.log(err);
@@ -81,8 +83,10 @@ class IdolPage extends React.Component {
     unFollowIdol(self.props.user.user_info.id,idol.id)
     .then(
       (res) => {
-        console.log(res);
-        this.setState({is_follow: false});
+        if(res.status == true)
+        {
+            this.setState({is_follow: false});
+        }
       }
     ).catch(err => {
       console.log(err);
