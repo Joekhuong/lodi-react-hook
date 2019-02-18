@@ -5,7 +5,9 @@ class ConfirmModal extends React.Component {
   state = {
     confirmText: this.props.confirmText || "Yes",
     closeText: this.props.closeText || "No",
-    title: this.props.title || "Are you sure you want to do this?"
+    title: this.props.title || "Are you sure you want to do this?",
+    closeBtnVariant: this.props.closeBtnVariant || 'secondary',
+    confirmBtnVariant: this.props.confirmBtnVariant || 'danger',
   };
 
   handleOnClose = e => {
@@ -27,10 +29,10 @@ class ConfirmModal extends React.Component {
           </Modal.Header>
           <Modal.Body>{this.props.children}</Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={this.handleOnConfirm}>
+            <Button variant={this.state.confirmBtnVariant} onClick={this.handleOnConfirm}>
               {this.state.confirmText}
             </Button>
-            <Button variant="secondary" onClick={this.handleOnClose}>
+            <Button variant={this.state.closeBtnVariant} onClick={this.handleOnClose}>
               {this.state.closeText}
             </Button>
           </Modal.Footer>

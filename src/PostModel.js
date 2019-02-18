@@ -32,7 +32,7 @@ export const createPost = (post) => {
 export const getPostByPageId = (page_id) => {
   return new Promise(function(resolve, reject) {
 
-    fetch(post_collection_url+"/page_id/"+page_id,{mode: 'cors'})
+    fetch(post_collection_url+"page_id/"+page_id,{mode: 'cors'})
     .then(res => res.json())
     .then(
       (result) => {

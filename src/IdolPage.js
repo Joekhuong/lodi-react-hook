@@ -1,8 +1,10 @@
 import React from "react";
 import { connect } from "./store";
 import { BrowserRouter as Router, Route, Link, withRouter, Switch } from "react-router-dom";
-
+import Post from "./Post";
+import PostForm from "./PostForm";
 import {getIdolByPageId} from "./IdolModel";
+import {getPostByPageId} from "./PostModel";
 import {checkFollow, followIdol, unFollowIdol} from "./FollowModel";
 import {
   Table,
@@ -29,14 +31,33 @@ class IdolPage extends React.Component {
 
   state = {
     idol: null,
-    is_follow: null
+    is_follow: null,
+    posts: [
+      {
+        content: "ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB",
+        created_at: "01-01-2019",
+        created_by: "Ly Quoc Phong"
+
+      },
+      {
+        content: "ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB",
+        created_at: "01-01-2019",
+        created_by: "Ly Quoc Phong"
+
+      },
+      {
+        content: "ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB ABSACJBSAJKCBSAKJCBASJKBCSKABCJSBABSACJBSAJKCBSAKJCBASJKBCSKABCJSB",
+        created_at: "01-01-2019",
+        created_by: "Ly Quoc Phong"
+
+      }
+    ]
+
   }
 
   componentDidMount() {
     var self = this;
     const { page_id } = this.props.match.params || "";
-
-    console.log(this.props);
 
     getIdolByPageId(page_id).then(res => {
 
@@ -45,8 +66,14 @@ class IdolPage extends React.Component {
       checkFollow(self.props.user.user_info.id,idol.id)
       .then(
         (res) => {
-          console.log(res);
-          this.setState({idol: idol, is_follow: res.status});
+          let is_follow = res.status;
+          getPostByPageId(page_id)
+          .then((res)=> {
+            this.setState({idol: idol, is_follow: is_follow, posts: res});
+          })
+          .catch(err => {
+            console.log(err);
+          });
         }
       ).catch(err => {
         console.log(err);
@@ -113,34 +140,29 @@ class IdolPage extends React.Component {
         </Row>
         <Row className="mt-2">
           <Col className="d-none d-lg-block d-xl-block">
-            <Image className="mt-3" src={this.state.idol.img_url} rounded />
-            {this.state.is_follow == false ? <Button className="mt-2" variant="primary" onClick={this.handleFollow}>
-              Follow
-            </Button> : <Button className="mt-2" variant="danger" onClick={this.handleUnfollow}>
-              Unfollow
-            </Button>}
+            <div className="d-flex flex-column justify-content-center align-items-center">
+              <Image className="img-avatar" src={this.state.idol.img_url} rounded />
+              {this.state.is_follow == false ? <Button width="100" className="mt-2 btn-follow" variant="primary" onClick={this.handleFollow}>
+                Follow
+              </Button> : <Button width="100" className="mt-2 btn-unfollow" variant="danger" onClick={this.handleUnfollow}>
+                Unfollow
+              </Button>}
+            </div>
           </Col>
 
           <Col lg="8">
             <Container>
               <Row className="">
                 <Col>
-                  <Form>
-                    <Form.Group controlId="">
-                      <Form.Control as="textarea" placeholder="What you want to post?" />
-                    </Form.Group>
-                    <Button variant="primary" type="submit">
-                      Post
-                    </Button>
-                  </Form>
+                  <PostForm />
                   <hr/>
+
                 </Col>
               </Row>
+              <Row className="">
+                {this.state.posts.map((post) => <Post item={post}/>)}
+              </Row>
             </Container>
-          </Col>
-
-          <Col className="d-none d-lg-block d-xl-block border border-warning">
-
           </Col>
         </Row>
       </Container>
