@@ -1,8 +1,11 @@
 import React from "react";
 import { connect } from "./store";
-import { FETCH_REGION } from "./actions";
-import { Container, Row, Col, Jumbotron, Table, Form } from "react-bootstrap";
-import { getRegions } from "./RegionModel";
+import { Container, Row, Table, Form } from "react-bootstrap";
+import {getFollowerInRegion} from "./FollowModel";
+import {
+  Link,
+  withRouter,
+} from "react-router-dom";
 
 const mapStateToProps = (state, props) => ({
   regions: state.regions,
@@ -15,19 +18,41 @@ class RankingTable extends React.Component {
 
   state = {
     select_region: -1,
-    onLoading: false
+    onLoading: false,
+    ranking_data: []
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    getFollowerInRegion(this.state.select_region)
+    .then(
+      (res) => {
+        this.setState({onLoading: false,ranking_data: res})
+      }
+    )
+    .catch(
+      (err) => (console.log(err))
+    );
+  }
 
   handleOnChange = (e) => {
     e.preventDefault(e);
     this.setState({
       select_region: e.target.value,
-      onLoading: true
+      onLoading: true,
+      ranking_data: []
     });
 
-    setTimeout(() => (this.setState({onLoading: false})), 5000);
+    getFollowerInRegion(e.target.value)
+    .then(
+      (res) => {
+        console.log(res);
+        setTimeout(() => (this.setState({onLoading: false,ranking_data:res})), 2000);
+      }
+    )
+    .catch(
+      (err) => (console.log(err))
+    );
+
 
   }
 
@@ -35,12 +60,12 @@ class RankingTable extends React.Component {
     return (
       <Container fluid="true">
         <Row className="">
-          <h1 className="d-block">Ranking Table</h1>
+          <h1 className="d-block">Ranking</h1>
           <Form.Control name="select_region" disabled={this.state.onLoading} value={this.state.select_region} onChange={this.handleOnChange} as="select">
             <option value="-1">All region</option>
             {Object.keys(this.props.regions).map((item, index) => {
               return (
-                <option value={this.props.regions[item].id}>
+                <option key={index} value={item}>
                   {this.props.regions[item]}
                 </option>
               );
@@ -48,18 +73,24 @@ class RankingTable extends React.Component {
           </Form.Control>
           <Table responsive>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Table cell</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Table cell</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Table cell</td>
-              </tr>
+            {Object.keys(this.state.ranking_data).map((item, index) => {
+
+              return (
+                <tr key={item}>
+                  <td>
+                    <Link
+                      className=""
+                      to={"/idol/" + this.state.ranking_data[item].page_id}
+                    >
+                      <span>
+                        {this.state.ranking_data[item].firstname}{" "}
+                        {this.state.ranking_data[item].lastname}
+                      </span>
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
             </tbody>
           </Table>
         </Row>
@@ -71,4 +102,4 @@ class RankingTable extends React.Component {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(RankingTable);
+)(withRouter(RankingTable));

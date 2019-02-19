@@ -77,3 +77,49 @@ export const unFollowIdol = (user_id,idol_id) => {
       .catch((err) => reject(err))
   })
 }
+
+export const getFollowedIdolForUser = (user_id) => {
+  return new Promise(function(resolve, reject) {
+
+    fetch(follow_collection_url+`user_id/${user_id}`, {
+        mode: 'cors',
+      })
+      .then(res => res.json())
+      .then(
+        (result) => {
+          resolve(result);
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          reject(error);
+        }
+      )
+      .catch((err) => reject(err))
+  })
+}
+
+export const getFollowerInRegion = (region_id) => {
+  return new Promise(function(resolve, reject) {
+
+    if(region_id === -1) region_id = '';
+
+    fetch(follow_collection_url+`ranking/${region_id}`, {
+        mode: 'cors',
+      })
+      .then(res => res.json())
+      .then(
+        (result) => {
+          resolve(result);
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          reject(error);
+        }
+      )
+      .catch((err) => reject(err))
+  })
+}

@@ -1,20 +1,9 @@
 import React from "react";
-import AuthenticatedNav from "./AuthenticatedNav";
-import Login from "./Login";
-import Register from "./Register";
-import Home from "./Home";
-import PrivateRoute from "./PrivateRoute";
-import IdolManagement from "./IdolManagement";
 import { connect } from "./store";
 import {
-  BrowserRouter as Router,
-  Route,
   Link,
   withRouter,
-  Switch
 } from "react-router-dom";
-import firebase from "./Firebase";
-import { LOGIN_ACTION, LOGOUT_ACTION } from "./actions";
 import { searchIdols } from "./IdolModel";
 import { Table, Container, Col, Row, Image } from "react-bootstrap";
 
@@ -61,14 +50,14 @@ class IdolSearch extends React.Component {
     const { term } = this.props.match.params;
     console.log(this.state.idols);
 
-    if (term == undefined) {
+    if (term === undefined) {
       this.props.history.push("/");
     }
 
-    if (this.props.loading_state == true) {
+    if (this.props.loading_state === true) {
       return null;
     }
-    
+
     return (
       <Container>
         <Row>

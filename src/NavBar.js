@@ -9,18 +9,14 @@ import IdolSearch from "./IdolSearch";
 import IdolPage from "./IdolPage";
 
 import { connect } from "./store";
-import { BrowserRouter as Router, Route, Link, withRouter, Switch } from "react-router-dom";
-import firebase from "./Firebase";
+import { Route, Link, withRouter, Switch } from "react-router-dom";
 import { LOGIN_ACTION, LOGOUT_ACTION } from "./actions";
-import {getUserByFirebaseUid, loginUser} from "./UserModel";
 
 import {
   Navbar,
   Nav,
-  NavDropdown,
   FormControl,
   Button,
-  Form
 } from "react-bootstrap";
 
 
@@ -74,7 +70,7 @@ class NavBar extends React.Component {
 
     const term = this.state.search_term;
 
-    if(term.length == 0)
+    if(term.length === 0)
     {
       return false;
     }
@@ -83,7 +79,7 @@ class NavBar extends React.Component {
 
   render() {
 
-    if (this.props.loading_state == true) {
+    if (this.props.loading_state === true) {
       return null;
     }
 
@@ -97,18 +93,15 @@ class NavBar extends React.Component {
                   <Navbar.Toggle aria-controls="basic-navbar-nav" />
                   <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between">
                     <Nav className="">
-                      <Nav.Link href="#"><Link className="nav-link" to="/">
+                      <Link className="nav-link" to="/">
                               Home Page
-                            </Link></Nav.Link>
-                      <Nav.Link href="#"><Link className="nav-link" to="/protected">
-                              Protected Page
-                            </Link></Nav.Link>
+                            </Link>
                             {(() => {
                                    if (this.props.user.user_info.is_admin) {
                                      return (
-                                         <Nav.Link href="#"> <Link className="nav-link" to="/idol_management">
+                                         <Link className="nav-link" to="/idol_management">
                                             Idol Management
-                                          </Link></Nav.Link>
+                                          </Link>
                                      );
                                    }
                                 })()}
@@ -147,13 +140,7 @@ class NavBar extends React.Component {
               {...this.props}
               component={IdolManagement}
             />
-            <PrivateRoute
-              authenticated={this.props.authenticated}
-              {...this.props}
-              path="/protected"
-              component={Protected}
-              test="1"
-            />
+
           </Switch>
         </div>
     );

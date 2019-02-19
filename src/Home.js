@@ -68,12 +68,12 @@ class Home extends React.Component {
                 </Col>
               </Row>
               <Row className="">
-                {this.state.posts.map((post) => <Post item={post}/>)}
+                {this.state.posts.map((post) => <Post key={post.id} item={post}/>)}
               </Row>
             </Container>
           </Col>
 
-          <Col className="d-none d-lg-block d-xl-block border border-warning">
+          <Col className="d-none d-lg-block d-xl-block">
             <FollowedIdolTable />
           </Col>
         </Row>
