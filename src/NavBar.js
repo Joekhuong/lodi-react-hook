@@ -132,8 +132,8 @@ class NavBar extends React.Component {
             <Route path="/public" component={Public} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
-            <Route path="/idol_search/:term?" component={IdolSearch} />
-            <Route path="/idol/:page_id" component={IdolPage} {...this.props}/>
+            <PrivateRoute path="/idol_search/:term?" component={IdolSearch} />
+            <PrivateRoute path="/idol/:page_id" component={IdolPage} {...this.props}/>
 
             <PrivateRoute
               path="/idol_management"

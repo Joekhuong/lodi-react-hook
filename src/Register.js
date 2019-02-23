@@ -63,6 +63,7 @@ class Register extends React.Component {
 
         createUser(user_info)
           .then(res => {
+            user.user_info = {...user_info,...res};
             self.login(user);
           })
           .catch(err => {
