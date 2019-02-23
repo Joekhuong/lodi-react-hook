@@ -64,7 +64,6 @@ class Register extends React.Component {
         createUser(user_info)
           .then(res => {
             self.login(user);
-            self.props.history.push("/");
           })
           .catch(err => {
             console.log(err);
@@ -76,7 +75,12 @@ class Register extends React.Component {
   };
 
   login = user => {
-    loginUser(this.props.dispatch, user);
+    var self = this;
+    loginUser(this.props.dispatch, user)
+    .then(() => (self.props.history.push("/")))
+    .catch(function(error) {
+      alert(error.message);
+    });
   };
 
   render() {
