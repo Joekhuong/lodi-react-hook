@@ -6,7 +6,7 @@ import {
   Row,
   Badge
 } from "react-bootstrap";
-
+import PostComment from "./PostForm";
 
 const mapStateToProps = (state, props) => ({
   ...props,
@@ -32,9 +32,10 @@ class Post extends React.Component {
   render() {
 
     var date = new Date(this.props.item.createdAt);
-    console.log(this.props.item.idol_name);
+    console.log(this.props.item);
     return (
-      <Container>
+      <>
+      <Container className="post-item">
         <Row className="post-content">
           {this.props.item.content}
         </Row>
@@ -43,9 +44,11 @@ class Post extends React.Component {
            <Badge variant="secondary" className="ml-2" >Posted at: {date.toDateString()}</Badge>
            {this.props.item.idol_name != null ? <Badge className="ml-2" variant="warning">Idol: {this.props.item.idol_name}</Badge> : ""}
         </Row>
+        <br/>
+        <PostComment parent_id={this.props.item.id} />
         <hr/>
       </Container>
-
+      </>
     );
   }
 

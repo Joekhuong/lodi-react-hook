@@ -21,3 +21,7 @@ code {
 .btn-unfollow {
   max-width: 100px;
 }
+
+.post-item{
+  min-height: 100px;
+}
