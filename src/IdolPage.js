@@ -152,7 +152,7 @@ class IdolPage extends React.Component {
                 </Col>
               </Row>
               <Row className="">
-                {this.state.posts.map((post) => <Post item={post}/>)}
+                {this.state.posts.map((post) => <Post key={post.id} item={post}/>)}
               </Row>
             </Container>
           </Col>

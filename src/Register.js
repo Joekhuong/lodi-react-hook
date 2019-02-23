@@ -75,12 +75,8 @@ class Register extends React.Component {
   };
 
   login = user => {
-    var self = this;
-    loginUser(this.props.dispatch, user)
-    .then(() => (self.props.history.push("/")))
-    .catch(function(error) {
-      alert(error.message);
-    });
+    loginUser(this.props.dispatch, user);
+    this.props.history.push("/");
   };
 
   render() {
