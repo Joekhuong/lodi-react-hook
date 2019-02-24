@@ -25,3 +25,8 @@ code {
 .post-item{
   min-height: 100px;
 }
+
+._loading_overlay_wrapper {
+  min-width: 100%;
+  min-height: 100%;
+}
