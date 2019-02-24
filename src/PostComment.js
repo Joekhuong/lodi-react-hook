@@ -2,63 +2,70 @@ import React from "react";
 import { connect } from "./store";
 import { withRouter } from "react-router-dom";
 import ConfirmModal from "./ConfirmModal";
-import {createPost} from "./PostModel";
+import { createPost, getPostByParentId } from "./PostModel";
 
-import {
-  Form,
-  Button
-} from "react-bootstrap";
-
+import { Form, Button, Badge } from "react-bootstrap";
 
 const mapStateToProps = (state, props) => ({
   ...props,
   ...state
 });
 
-const mapDispatchToProps = (dispatch, props) => ({
-
-});
+const mapDispatchToProps = (dispatch, props) => ({});
 
 class PostComment extends React.Component {
-
   state = {
     show_modal: false,
     post_content: "",
-    disable_post_btn: true,
+    disable_post_btn: false,
     page_id: this.props.page_id || null,
-    parent_id: this.props.parent_id || null
+    parent_id: this.props.parent_id || null,
+    comments: []
   };
 
-  handlePost = () => {
+  componentDidMount = () => {
+    this.getComments();
+  }
 
+  getComments = () => {
+    getPostByParentId(this.state.parent_id)
+    .then((res)=> {
+      this.setState({comments: res});
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
+  handlePost = () => {
     let post = {
       content: this.state.post_content,
       user_id: this.props.user.user_info.id,
       page_id: this.state.page_id,
       parent_id: this.state.parent_id
-    }
-    console.log(post);
+    };
+
     this.setState({
       show_modal: false,
       disable_post_btn: true
     });
 
     createPost(post)
-    .then(()=>{
-      this.setState({
-        post_content: "",
-        disable_post_btn: false
-      });
-      this.props.onPosted();
-    })
-    .catch(()=>{
-      this.setState({
-        post_content: "",
-        disable_post_btn: false
-      });
+      .then(() => {
+        this.setState({
+          post_content: "",
+          disable_post_btn: false
+        });
 
-    });
-  }
+        this.getComments();
+      })
+      .catch(() => {
+        this.setState({
+          post_content: "",
+          disable_post_btn: false
+        });
+      });
+  };
 
   showModal = () => {
     this.setState({
@@ -72,28 +79,62 @@ class PostComment extends React.Component {
     });
   };
 
-  handleContentChange = (e) => {
-
+  handleContentChange = e => {
     let new_state = {
       post_content: e.target.value,
       disable_post_btn: e.target.value.length === 0
-    }
+    };
 
-    this.setState(new_state)
-  }
+    this.setState(new_state);
+  };
 
   render() {
-    console.log(this.props.user);
     return (
       <>
-        <Form className="border border-dark">
-          <Form.Group controlId="">
-            <Form.Control as="textarea" placeholder="What you want to post?" value={this.state.post_content} onChange={this.handleContentChange}/>
-          </Form.Group>
-        </Form>
-        <Button disabled={this.state.disable_post_btn} variant="primary" type="submit" onClick={this.showModal}>
-          Post
-        </Button>
+        <div className="detailBox">
+          <div className="titleBox">
+            <label>Comments</label>
+          </div>
+          <div className="actionBox">
+            <ul className="commentList">
+              {Object.keys(this.state.comments).map((item, index) => {
+                var date = new Date(this.state.comments[item].createdAt);
+                return (
+                  <li key={item}>
+                    <div className="commentText">
+                      <p className="">{this.state.comments[item].content}</p>
+                      <Badge variant="secondary" className="ml-2" >Posted at: {date.toDateString()}</Badge>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+
+            <form className="form-inline">
+              <div className="form-group">
+                <input
+                  className="form-control"
+                  type="text"
+                  placeholder="Your comments"
+                  onChange={this.handleContentChange}
+                  value={this.state.post_content}
+                />
+              </div>
+
+              <div className="form-group">
+                <Button
+                  disabled={this.state.disable_post_btn}
+                  variant="primary"
+                  type="button"
+                  onClick={this.showModal}
+                >
+                  Comment
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+
         <ConfirmModal
           show={this.state.show_modal}
           onConfirm={this.handlePost}
@@ -101,14 +142,13 @@ class PostComment extends React.Component {
           confirmText="Post"
           confirmBtnVariant="primary"
           closeText="Cancel"
-          title={`Are you sure you want to post?`}
+          title={`Are you sure you want to post comment?`}
         >
           <p>Click Post when want to post, otherwise click Cancel</p>
         </ConfirmModal>
       </>
     );
   }
-
 }
 
 export default connect(

@@ -33,7 +33,6 @@ class Home extends React.Component {
 
     getPostByUserId(this.props.user.user_info.id)
     .then((res)=> {
-      console.log(res);
       this.setState({posts: res});
     })
     .catch(err => {
@@ -64,9 +63,9 @@ class Home extends React.Component {
               <Row className="">
                 <Col>
                   <PostForm user_id={this.props.user.user_info.id} onPosted={this.handleOnPost}/>
-                  <hr/>
                 </Col>
               </Row>
+              <hr/>
               <Row className="">
                 {this.state.posts.map((post) => <Post key={post.id} item={post}/>)}
               </Row>

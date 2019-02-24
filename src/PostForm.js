@@ -38,7 +38,7 @@ class Post extends React.Component {
       disable_post_btn: true,
       showOverlay: true,
     });
-    
+
     setTimeout(() => {
       createPost(post)
         .then(() => {
@@ -56,7 +56,7 @@ class Post extends React.Component {
             showOverlay: false
           });
         });
-    }, 5000);
+    }, 3000);
   };
 
   showModal = () => {

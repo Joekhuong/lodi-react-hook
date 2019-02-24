@@ -20,7 +20,6 @@ class FollowedIdolTable extends React.Component {
   componentDidMount() {
     getFollowedIdolForUser(this.props.user.user_info.id)
       .then(res => {
-        console.log(res);
         this.setState({ idols: res });
       })
       .catch(err => {
