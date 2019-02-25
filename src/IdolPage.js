@@ -134,7 +134,7 @@ class IdolPage extends React.Component {
           <Col className="d-none d-lg-block d-xl-block">
             <div className="d-flex flex-column justify-content-center align-items-center">
               <Image className="img-avatar" src={this.state.idol.img_url} rounded />
-              {this.state.is_follow == false ? <Button width="100" className="mt-2 btn-follow" variant="primary" onClick={this.handleFollow}>
+              {this.state.is_follow === false ? <Button width="100" className="mt-2 btn-follow" variant="primary" onClick={this.handleFollow}>
                 Follow
               </Button> : <Button width="100" className="mt-2 btn-unfollow" variant="danger" onClick={this.handleUnfollow}>
                 Unfollow
@@ -146,9 +146,8 @@ class IdolPage extends React.Component {
             <Container>
               <Row className="">
                 <Col>
-                  <PostForm page_id={page_id} onPosted={this.handleOnPost}/>
+                  {this.state.is_follow === true ? <PostForm page_id={page_id} onPosted={this.handleOnPost}/> : ""}                  
                   <hr/>
-
                 </Col>
               </Row>
               <Row className="">

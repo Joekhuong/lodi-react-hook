@@ -17,7 +17,7 @@ class PostComment extends React.Component {
   state = {
     show_modal: false,
     post_content: "",
-    disable_post_btn: false,
+    disable_post_btn: true,
     page_id: this.props.page_id || null,
     parent_id: this.props.parent_id || null,
     comments: []
